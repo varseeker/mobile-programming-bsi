@@ -1,0 +1,100 @@
+import 'package:flutter/material.dart';
+import '/helpers/user_info.dart';
+import '/ui/pegawai_page.dart';
+import '/ui/pasien_page.dart';
+import '/ui/poli_page.dart';
+import '/ui/beranda.dart';
+import '/ui/login.dart';
+
+class Sidebar extends StatelessWidget {
+  const Sidebar({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Drawer(
+      child: ListView(
+        padding: EdgeInsets.zero,
+        children: [
+          UserAccountsDrawerHeader(
+            accountName: FutureBuilder<String>(
+              future: UserInfo().getUsername(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Text("Loading...");
+                } else if (snapshot.hasError) {
+                  return Text("Error");
+                } else {
+                  return Text(snapshot.data ?? "Guest");
+                }
+              },
+            ),
+            accountEmail: FutureBuilder<String>(
+              future: UserInfo().getEmail(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Text("Loading...");
+                } else if (snapshot.hasError) {
+                  return Text("Error");
+                } else {
+                  return Text(snapshot.data ?? "Guest");
+                }
+              },
+            ),
+            decoration: BoxDecoration(color: Colors.blue),
+          ),
+          ListTile(
+            leading: Icon(Icons.home),
+            title: Text("Beranda"),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Beranda()),
+              );
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.accessible),
+            title: Text("Poli"),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => PoliPage()),
+              );
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.people),
+            title: Text("Pegawai"),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => PegawaiPage()),
+              );
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.account_box_sharp),
+            title: Text("Pasien"),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => PasienPage()),
+              );
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.logout_rounded),
+            title: Text("Keluar"),
+            onTap: () {
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => Login()),
+                (Route<dynamic> route) => false,
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
+}
